@@ -1,31 +1,42 @@
 package ufes.contatos.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ufes.contatos.business.command.Receptor;
+import ufes.contatos.business.command.VerificaEstadoContato;
+import ufes.contatos.business.state.EstadoExistente;
+import ufes.contatos.business.state.EstadoNovo;
 import ufes.contatos.model.Contato;
 import ufes.contatos.repository.ContatoRepository;
-import ufes.contatos.repository.ContatoStateRepository;
 
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/")
 public class ContatoController {
 
-    private final ContatoRepository contatoRepository;
-    private final ContatoStateRepository contatoStateRepository;
+    private ContatoRepository contatoRepository;
+    private Receptor receptor;
+    VerificaEstadoContato verificaEstadoContato;
 
-    public ContatoController(ContatoRepository contatoRepository, ContatoStateRepository contatoStateRepository) {
+    public ContatoController(ContatoRepository contatoRepository) {
         this.contatoRepository = contatoRepository;
-        this.contatoStateRepository = contatoStateRepository;
+        receptor = new Receptor(contatoRepository);
+        verificaEstadoContato = new VerificaEstadoContato(receptor);
     }
 
-    @GetMapping("/contatos")
+    @GetMapping
     public List<Contato> getContatos() {
         return (List<Contato>) contatoRepository.findAll();
     }
 
-    @PostMapping("/contatos")
-    void addContato(@RequestBody Contato contato) {
+    @PostMapping
+    public void addContato(@RequestBody Contato contato) {
+        if(verificaEstadoContato.execute(contato)) {
+            contato.setEstado(new EstadoNovo(contato));
+        }   else {
+            contato.setEstado(new EstadoExistente(contato));
+        }
+
         contatoRepository.save(contato);
     }
 }

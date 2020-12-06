@@ -1,5 +1,6 @@
 package ufes.contatos.business.state;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import ufes.contatos.business.command.ContatoStateCommand;
@@ -17,6 +18,7 @@ public abstract class ContatoState {
     private Long id;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "estado")
+    @JsonIgnore
     private Contato contato;
 
     @Transient
@@ -24,8 +26,5 @@ public abstract class ContatoState {
 
     public ContatoState(Contato contato) {
         this.contato = contato;
-
-        //if (contatoStateCommand.execute(contato))
-            //contato.setEstado(new EstadoExistente(contato));
     }
 }
