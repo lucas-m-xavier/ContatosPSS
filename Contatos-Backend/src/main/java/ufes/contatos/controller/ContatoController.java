@@ -32,9 +32,9 @@ public class ContatoController {
     @PostMapping
     public void addContato(@RequestBody Contato contato) {
         if(verificaEstadoContato.execute(contato)) {
-            contato.setEstado(new EstadoNovo(contato));
+            contato.setEstado(new EstadoNovo());
         }   else {
-            contato.setEstado(new EstadoExistente(contato));
+            contato.setEstado(new EstadoExistente());
         }
 
         contatoRepository.save(contato);
