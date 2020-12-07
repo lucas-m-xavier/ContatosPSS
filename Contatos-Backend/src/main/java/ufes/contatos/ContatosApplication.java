@@ -15,6 +15,7 @@ public class ContatosApplication {
     public static void main(String[] args) {
         SpringApplication.run(ContatosApplication.class, args);
     }
+
     /*
     @Bean
     CommandLineRunner init(ContatoRepository contatoRepository) {
@@ -31,5 +32,6 @@ public class ContatosApplication {
 
         };
     }
-    */
+    */    
+    //aplicação no heroku
 }
