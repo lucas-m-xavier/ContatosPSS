@@ -34,4 +34,9 @@ public class Contato {
         if (!verificaEstadoContato.execute(this))
             this.estado = new EstadoExistente(this);
     }
+    
+    public Contato(String nome, String telefone) {
+        this.nome = nome;
+        this.telefone = telefone;
+    }
 }
